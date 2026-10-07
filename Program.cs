@@ -10,17 +10,22 @@ class Program
         while (keepRunning)
         {
             Console.Write("\nEnter first number: ");
-            if (!double.TryParse(Console.ReadLine(), out double num1))
+            string? firstInput = Console.ReadLine();
+            if (firstInput is null) break;
+            if (!double.TryParse(firstInput, out double num1))
             {
                 Console.WriteLine("Invalid number format");
                 continue;
             }
 
             Console.Write("Enter an operation (+, -, *, /): ");
-            string op = Console.ReadLine();
+            string? op = Console.ReadLine();
+            if (op is null) break;
 
             Console.Write("Enter second number: ");
-            if (!double.TryParse(Console.ReadLine(), out double num2))
+            string? secondInput = Console.ReadLine();
+            if (secondInput is null) break;
+            if (!double.TryParse(secondInput, out double num2))
             {
                 Console.WriteLine("Invalid number format");
                 continue;
