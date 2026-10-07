@@ -12,7 +12,7 @@ class Program
             Console.Write("\nEnter first number: ");
             string? firstInput = Console.ReadLine();
             if (firstInput is null) break;
-            if (!double.TryParse(firstInput, out double num1))
+            if (!double.TryParse(firstInput, out double num1) || !double.IsFinite(num1))
             {
                 Console.WriteLine("Invalid number format");
                 continue;
@@ -25,7 +25,7 @@ class Program
             Console.Write("Enter second number: ");
             string? secondInput = Console.ReadLine();
             if (secondInput is null) break;
-            if (!double.TryParse(secondInput, out double num2))
+            if (!double.TryParse(secondInput, out double num2) || !double.IsFinite(num2))
             {
                 Console.WriteLine("Invalid number format");
                 continue;
@@ -47,6 +47,12 @@ class Program
                 default:
                     Console.WriteLine("Unsupported operation");
                     continue;
+            }
+
+            if (!double.IsFinite(result))
+            {
+                Console.WriteLine("Result is outside the supported numeric range");
+                continue;
             }
 
             Console.WriteLine($"Result: {result}");
