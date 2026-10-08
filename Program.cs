@@ -1,73 +1,66 @@
-﻿using System;
+using System;
+using System.IO;
 
-class Program
+namespace CalculatorApp;
+
+public class Program
 {
-    static void Main(string[] args)
+    static void Main() => Run(Console.In, Console.Out);
+
+    public static void Run(TextReader input, TextWriter output)
     {
-        bool keepRunning = true;
-        Console.WriteLine("C# Calculator");
-
-        while (keepRunning)
+        output.WriteLine("C# Calculator");
+        while (TryReadNumber(input, output, "\nEnter first number: ", out double first))
         {
-            Console.Write("\nEnter first number: ");
-            string? firstInput = Console.ReadLine();
-            if (firstInput is null) break;
-            if (!double.TryParse(firstInput, out double num1) || !double.IsFinite(num1))
+            string? operation;
+            while (true)
             {
-                Console.WriteLine("Invalid number format");
-                continue;
+                output.Write("Enter an operation (+, -, *, /): ");
+                operation = input.ReadLine()?.Trim();
+                if (operation is null) { output.WriteLine("Thank you for using Calculator <3 "); return; }
+                if (operation is "+" or "-" or "*" or "/") break;
+                output.WriteLine("Unsupported operation");
             }
 
-            Console.Write("Enter an operation (+, -, *, /): ");
-            string? op = Console.ReadLine()?.Trim();
-            if (op is null) break;
-            if (op is not ("+" or "-" or "*" or "/"))
+            if (!TryReadNumber(input, output, "Enter second number: ", out double second, operation == "/")) break;
+            double result = operation switch
             {
-                Console.WriteLine("Unsupported operation");
-                continue;
-            }
-
-            Console.Write("Enter second number: ");
-            string? secondInput = Console.ReadLine();
-            if (secondInput is null) break;
-            if (!double.TryParse(secondInput, out double num2) || !double.IsFinite(num2))
-            {
-                Console.WriteLine("Invalid number format");
-                continue;
-            }
-
-            double result = 0;
-            switch (op)
-            {
-                case "+": result = num1 + num2; break;
-                case "-": result = num1 - num2; break;
-                case "*": result = num1 * num2; break;
-                case "/":
-                    if (num2 == 0)
-                    {
-                        Console.WriteLine("Can't divide on zero");
-                        continue;
-                    }
-                    result = num1 / num2; break;
-                default:
-                    Console.WriteLine("Unsupported operation");
-                    continue;
-            }
-
+                "+" => first + second,
+                "-" => first - second,
+                "*" => first * second,
+                _ => first / second,
+            };
             if (!double.IsFinite(result))
             {
-                Console.WriteLine("Result is outside the supported numeric range");
+                output.WriteLine("Result is outside the supported numeric range");
                 continue;
             }
-
-            Console.WriteLine($"Result: {result}");
-
-            Console.Write("\nPerform another calculation? (y/n): ");
-            if (Console.ReadLine()?.Trim().ToLower() != "y")
-            {
-                keepRunning = false;
-            }
+            output.WriteLine($"Result: {result}");
+            output.Write("\nPerform another calculation? (y/n): ");
+            if (!string.Equals(input.ReadLine()?.Trim(), "y", StringComparison.OrdinalIgnoreCase)) break;
         }
-        Console.WriteLine("Thank you for using Calculator <3 ");
+        output.WriteLine("Thank you for using Calculator <3 ");
+    }
+
+    private static bool TryReadNumber(TextReader input, TextWriter output, string prompt, out double value, bool nonZero = false)
+    {
+        while (true)
+        {
+            output.Write(prompt);
+            string? text = input.ReadLine();
+            value = 0;
+            if (text is null) return false;
+            if (!double.TryParse(text, out value) || !double.IsFinite(value))
+            {
+                output.WriteLine("Invalid number format");
+                continue;
+            }
+            if (nonZero && value == 0)
+            {
+                output.WriteLine("Can't divide on zero");
+                continue;
+            }
+            return true;
+        }
     }
 }
