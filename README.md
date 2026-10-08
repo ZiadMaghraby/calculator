@@ -2,6 +2,15 @@
 
 An interactive C# console calculator built with .NET 10.
 
+
+## Real execution preview
+
+This console application has no graphical interface. The image below renders the **actual standard output** from a .NET 10 run beside the supplied input. It demonstrates an invalid operator, division-by-zero recovery, and two calculations.
+
+![Actual calculator input and captured output](docs/images/console-run.png)
+
+Raw capture: [input](docs/demo-input.txt) · [output](docs/demo-output.txt).
+
 ## Features
 
 - Addition, subtraction, multiplication, and division.

@@ -1,0 +1,10 @@
+C# Calculator
+
+Enter first number: Enter an operation (+, -, *, /): Unsupported operation
+Enter an operation (+, -, *, /): Enter second number: Can't divide on zero
+Enter second number: Result: 4
+
+Perform another calculation? (y/n): 
+Enter first number: Enter an operation (+, -, *, /): Enter second number: Result: 42
+
+Perform another calculation? (y/n): Thank you for using Calculator <3 
