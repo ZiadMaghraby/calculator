@@ -19,8 +19,13 @@ class Program
             }
 
             Console.Write("Enter an operation (+, -, *, /): ");
-            string? op = Console.ReadLine();
+            string? op = Console.ReadLine()?.Trim();
             if (op is null) break;
+            if (op is not ("+" or "-" or "*" or "/"))
+            {
+                Console.WriteLine("Unsupported operation");
+                continue;
+            }
 
             Console.Write("Enter second number: ");
             string? secondInput = Console.ReadLine();
