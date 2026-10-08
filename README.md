@@ -5,7 +5,7 @@ An interactive C# console calculator built with .NET 10.
 ## Features
 
 - Addition, subtraction, multiplication, and division.
-- Numeric input validation with a retry after invalid input.
+- Numeric input validation that retries the current field without losing the other operand or operator.
 - Division-by-zero protection.
 - Multiple calculations in one session.
 
@@ -41,11 +41,16 @@ Thank you for using Calculator <3
 
 | Input | Behavior |
 | --- | --- |
-| Invalid first or second number | Prints `Invalid number format` and starts a new calculation. |
-| Unsupported operator | Prints `Unsupported operation` and starts a new calculation. |
-| Division by zero | Prints `Can't divide on zero` and starts a new calculation. |
+| Invalid first or second number | Prints `Invalid number format` and retries that number. |
+| Unsupported operator | Prints `Unsupported operation` and retries the operator, preserving the first number. |
+| Division by zero | Prints `Can't divide on zero` and retries the divisor. |
+| End of input at any prompt | Exits cleanly without looping. |
 
 Numbers use the system's current culture, so the decimal separator depends on your locale.
+
+## Regression checks
+
+Run `dotnet run --project tests/Calculator.Regression.csproj`. The dependency-free harness covers invalid-input recovery, zero divisors, overflow, locale-specific decimals, repeat calculations and EOF at each prompt. GitHub Actions runs it on Windows and Linux.
 
 ## Project structure
 
