@@ -55,7 +55,7 @@ Thank you for using Calculator <3
 | Division by zero | Prints `Can't divide on zero` and retries the divisor. |
 | End of input at any prompt | Exits cleanly without looping. |
 
-Numbers use the system's current culture, so the decimal separator depends on your locale.
+Numbers use the system's current culture, so the decimal separator depends on your locale. Thousands/grouping separators are not accepted: enter `1500` rather than `1,500` on an English system. This prevents a misplaced decimal separator such as `1,5` from silently becoming `15`. Signs, surrounding whitespace, and scientific notation such as `1.5e2` remain supported (using your locale's decimal separator).
 
 ## Regression checks
 
