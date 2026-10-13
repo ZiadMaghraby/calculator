@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Globalization;
 
 namespace CalculatorApp;
 
@@ -50,7 +51,7 @@ public class Program
             string? text = input.ReadLine();
             value = 0;
             if (text is null) return false;
-            if (!double.TryParse(text, out value) || !double.IsFinite(value))
+            if (!double.TryParse(text, NumberStyles.Float, CultureInfo.CurrentCulture, out value) || !double.IsFinite(value))
             {
                 output.WriteLine("Invalid number format");
                 continue;

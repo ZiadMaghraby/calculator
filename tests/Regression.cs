@@ -22,6 +22,10 @@ Check("nonfinite input", "NaN\nInfinity\n2\n*\n3\nn\n", ["Invalid number format"
 Check("overflow recovery", "1e308\n*\n1e308\n5\n+\n2\nn\n", ["outside the supported numeric range", "Result: 7"]);
 Check("repeat calculation", "1\n+\n2\n Y \n6\n/\n2\nn\n", ["Result: 3"]);
 Check("locale decimal separator", "1,5\n+\n2,5\nn\n", ["Result: 4"], "fr-FR");
+Check("comma is not silently treated as grouping", "1,5\n1.5\n+\n2.5\nn\n", ["Invalid number format", "Result: 4"]);
+Check("repeated grouping separators are rejected", "1,,2\n12\n+\n3\nn\n", ["Invalid number format", "Result: 15"]);
+Check("wrong decimal separator in German", "1.5\n1,5\n+\n2,5\nn\n", ["Invalid number format", "Result: 4"], "de-DE");
+Check("scientific notation and whitespace remain supported", " 1.5e2 \n+\n-2.5e1\nn\n", ["Result: 125"]);
 foreach (var input in new[] { "", "bad\n", "1\n", "1\n?\n", "1\n+\n", "1\n/\n0\n" })
     Check("EOF during prompt", input, []);
 Console.WriteLine($"{passed} regression scenarios passed.");
