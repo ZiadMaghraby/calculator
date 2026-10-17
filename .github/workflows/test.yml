@@ -13,4 +13,7 @@ jobs:
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '10.0.x'
-      - run: dotnet run --project tests/Calculator.Regression.csproj --configuration Release
+      - name: Build with warnings as errors
+        run: dotnet build tests/Calculator.Regression.csproj --configuration Release --warnaserror
+      - name: Run regression scenarios
+        run: dotnet run --project tests/Calculator.Regression.csproj --configuration Release --no-build
