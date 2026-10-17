@@ -10,6 +10,8 @@ public class Program
 
     public static void Run(TextReader input, TextWriter output)
     {
+        ArgumentNullException.ThrowIfNull(input);
+        ArgumentNullException.ThrowIfNull(output);
         output.WriteLine("C# Calculator");
         while (TryReadNumber(input, output, "\nEnter first number: ", out double first))
         {

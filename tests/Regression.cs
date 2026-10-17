@@ -33,4 +33,17 @@ Check("wrong decimal separator in German", "1.5\n1,5\n+\n2,5\nn\n", ["Invalid nu
 Check("scientific notation and whitespace remain supported", " 1.5e2 \n+\n-2.5e1\nn\n", ["Result: 125"]);
 foreach (var input in new[] { "", "bad\n", "1\n", "1\n?\n", "1\n+\n", "1\n/\n0\n" })
     Check("EOF during prompt", input, []);
+foreach (bool missingInput in new[] { true, false })
+{
+    try
+    {
+        CalculatorApp.Program.Run(missingInput ? null! : new StringReader(""), missingInput ? new StringWriter() : null!);
+        throw new Exception("Expected a null stream to be rejected");
+    }
+    catch (ArgumentNullException error)
+    {
+        if (error.ParamName != (missingInput ? "input" : "output")) throw;
+        passed++;
+    }
+}
 Console.WriteLine($"{passed} regression scenarios passed.");
