@@ -13,8 +13,9 @@ public class Program
         ArgumentNullException.ThrowIfNull(input);
         ArgumentNullException.ThrowIfNull(output);
         output.WriteLine("C# Calculator");
-        output.WriteLine("Type q or quit to exit; type help at the operation prompt.");
-        while (TryReadNumber(input, output, "\nEnter first number: ", out double first))
+        output.WriteLine("Type q or quit to exit; type help at the operation prompt; use ans for the last result.");
+        double? answer = null;
+        while (TryReadNumber(input, output, "\nEnter first number: ", out double first, answer: answer))
         {
             string? operation;
             while (true)
@@ -38,7 +39,7 @@ public class Program
                 output.WriteLine("Unsupported operation");
             }
 
-            if (!TryReadNumber(input, output, "Enter second number: ", out double second, operation is "/" or "%")) break;
+            if (!TryReadNumber(input, output, "Enter second number: ", out double second, operation is "/" or "%", answer)) break;
             double result = operation switch
             {
                 "+" => first + second,
@@ -58,6 +59,7 @@ public class Program
                 output.WriteLine("Result is outside the supported numeric range");
                 continue;
             }
+            answer = result;
             output.WriteLine($"Result: {result}");
             if (!ReadRepeat(input, output)) break;
         }
@@ -80,7 +82,7 @@ public class Program
         text.Trim().Equals("q", StringComparison.OrdinalIgnoreCase) ||
         text.Trim().Equals("quit", StringComparison.OrdinalIgnoreCase);
 
-    private static bool TryReadNumber(TextReader input, TextWriter output, string prompt, out double value, bool nonZero = false)
+    private static bool TryReadNumber(TextReader input, TextWriter output, string prompt, out double value, bool nonZero = false, double? answer = null)
     {
         while (true)
         {
@@ -88,7 +90,16 @@ public class Program
             string? text = input.ReadLine();
             value = 0;
             if (text is null || IsQuit(text)) return false;
-            if (!double.TryParse(text, NumberStyles.Float, CultureInfo.CurrentCulture, out value) || !double.IsFinite(value))
+            if (text.Trim().Equals("ans", StringComparison.OrdinalIgnoreCase))
+            {
+                if (answer is null)
+                {
+                    output.WriteLine("No previous result; enter a number first.");
+                    continue;
+                }
+                value = answer.Value;
+            }
+            else if (!double.TryParse(text, NumberStyles.Float, CultureInfo.CurrentCulture, out value) || !double.IsFinite(value))
             {
                 output.WriteLine("Invalid number format");
                 continue;
