@@ -39,10 +39,21 @@ public class Program
                 continue;
             }
             output.WriteLine($"Result: {result}");
-            output.Write("\nPerform another calculation? (y/n): ");
-            if (!string.Equals(input.ReadLine()?.Trim(), "y", StringComparison.OrdinalIgnoreCase)) break;
+            if (!ReadRepeat(input, output)) break;
         }
         output.WriteLine("Thank you for using Calculator <3 ");
+    }
+
+    private static bool ReadRepeat(TextReader input, TextWriter output)
+    {
+        while (true)
+        {
+            output.Write("\nPerform another calculation? (y/n): ");
+            string? response = input.ReadLine()?.Trim().ToLowerInvariant();
+            if (response is "y" or "yes") return true;
+            if (response is null or "n" or "no" || IsQuit(response)) return false;
+            output.WriteLine("Enter y/yes to continue or n/no to exit.");
+        }
     }
 
     private static bool IsQuit(string text) =>

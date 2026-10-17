@@ -48,4 +48,7 @@ foreach (bool missingInput in new[] { true, false })
 }
 foreach (var input in new[] { "q\n", " QUIT \n", "1\nq\n", "1\n+\nquit\n", "1\n/\n0\nq\n" })
     Check("quit at calculation prompt", input, []);
+Check("repeat retries invalid response", "1\n+\n2\nmaybe\n YES \n4\n-\n1\nNO\n", ["Result: 3", "Enter y/yes", "Result: 3"]);
+Check("EOF at repeat", "1\n+\n2\n", ["Result: 3"]);
+Check("quit at repeat", "1\n+\n2\nquit\n", ["Result: 3"]);
 Console.WriteLine($"{passed} regression scenarios passed.");
