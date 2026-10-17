@@ -46,4 +46,6 @@ foreach (bool missingInput in new[] { true, false })
         passed++;
     }
 }
+foreach (var input in new[] { "q\n", " QUIT \n", "1\nq\n", "1\n+\nquit\n", "1\n/\n0\nq\n" })
+    Check("quit at calculation prompt", input, []);
 Console.WriteLine($"{passed} regression scenarios passed.");

@@ -20,7 +20,7 @@ public class Program
             {
                 output.Write("Enter an operation (+, -, *, /): ");
                 operation = input.ReadLine()?.Trim();
-                if (operation is null) { output.WriteLine("Thank you for using Calculator <3 "); return; }
+                if (operation is null || IsQuit(operation)) { output.WriteLine("Thank you for using Calculator <3 "); return; }
                 if (operation is "+" or "-" or "*" or "/") break;
                 output.WriteLine("Unsupported operation");
             }
@@ -45,6 +45,10 @@ public class Program
         output.WriteLine("Thank you for using Calculator <3 ");
     }
 
+    private static bool IsQuit(string text) =>
+        text.Trim().Equals("q", StringComparison.OrdinalIgnoreCase) ||
+        text.Trim().Equals("quit", StringComparison.OrdinalIgnoreCase);
+
     private static bool TryReadNumber(TextReader input, TextWriter output, string prompt, out double value, bool nonZero = false)
     {
         while (true)
@@ -52,7 +56,7 @@ public class Program
             output.Write(prompt);
             string? text = input.ReadLine();
             value = 0;
-            if (text is null) return false;
+            if (text is null || IsQuit(text)) return false;
             if (!double.TryParse(text, NumberStyles.Float, CultureInfo.CurrentCulture, out value) || !double.IsFinite(value))
             {
                 output.WriteLine("Invalid number format");
