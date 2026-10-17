@@ -9,6 +9,11 @@ void Check(string name, string input, string[] expected, string? culture = null)
     var actual = output.ToString();
     foreach (string text in expected)
         if (!actual.Contains(text)) throw new Exception($"{name}: missing '{text}' in {actual}");
+    var results = System.Text.RegularExpressions.Regex.Matches(actual, @"Result: ([^\r\n]+)")
+        .Select(match => match.Value).ToArray();
+    var expectedResults = expected.Where(text => text.StartsWith("Result: ")).ToArray();
+    if (!results.SequenceEqual(expectedResults))
+        throw new Exception($"{name}: unexpected result sequence: {string.Join(", ", results)}");
     if (actual.Split("Thank you for using Calculator").Length != 2)
         throw new Exception($"{name}: expected one clean exit");
     Console.WriteLine($"PASS {name}");
@@ -20,7 +25,7 @@ Check("retry second operand preserves calculation", "12\n-\nbad\n2\nn\n", ["Inva
 Check("zero divisor retries second operand", "12\n/\n0\n-0\n3\nn\n", ["Can't divide on zero", "Result: 4"]);
 Check("nonfinite input", "NaN\nInfinity\n2\n*\n3\nn\n", ["Invalid number format", "Result: 6"]);
 Check("overflow recovery", "1e308\n*\n1e308\n5\n+\n2\nn\n", ["outside the supported numeric range", "Result: 7"]);
-Check("repeat calculation", "1\n+\n2\n Y \n6\n/\n2\nn\n", ["Result: 3"]);
+Check("repeat calculation", "1\n+\n2\n Y \n6\n/\n2\nn\n", ["Result: 3", "Result: 3"]);
 Check("locale decimal separator", "1,5\n+\n2,5\nn\n", ["Result: 4"], "fr-FR");
 Check("comma is not silently treated as grouping", "1,5\n1.5\n+\n2.5\nn\n", ["Invalid number format", "Result: 4"]);
 Check("repeated grouping separators are rejected", "1,,2\n12\n+\n3\nn\n", ["Invalid number format", "Result: 15"]);
