@@ -19,12 +19,12 @@ public class Program
             string? operation;
             while (true)
             {
-                output.Write("Enter an operation (+, -, *, /, %): ");
+                output.Write("Enter an operation (+, -, *, /, %, ^): ");
                 operation = input.ReadLine()?.Trim();
                 if (operation is null || IsQuit(operation)) { output.WriteLine("Thank you for using Calculator <3 "); return; }
                 if (operation.Equals("help", StringComparison.OrdinalIgnoreCase) || operation == "?")
                 {
-                    output.WriteLine("Operations: + add, - subtract, * multiply, / divide, % remainder. Type q to exit.");
+                    output.WriteLine("Operations: + add, - subtract, * multiply, / divide, % remainder, ^ power. Type q to exit.");
                     continue;
                 }
                 operation = operation.ToLowerInvariant() switch
@@ -34,7 +34,7 @@ public class Program
                     "−" => "-",
                     _ => operation,
                 };
-                if (operation is "+" or "-" or "*" or "/" or "%") break;
+                if (operation is "+" or "-" or "*" or "/" or "%" or "^") break;
                 output.WriteLine("Unsupported operation");
             }
 
@@ -45,8 +45,14 @@ public class Program
                 "-" => first - second,
                 "*" => first * second,
                 "%" => first % second,
+                "^" => Math.Pow(first, second),
                 _ => first / second,
             };
+            if (double.IsNaN(result))
+            {
+                output.WriteLine("Operation has no real-number result");
+                continue;
+            }
             if (!double.IsFinite(result))
             {
                 output.WriteLine("Result is outside the supported numeric range");

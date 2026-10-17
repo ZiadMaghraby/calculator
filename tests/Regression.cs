@@ -59,4 +59,8 @@ Check("typographic subtraction", "3\n−\n4\nn\n", ["Result: -1"]);
 Check("remainder", "17\n%\n5\nn\n", ["Result: 2"]);
 Check("negative remainder", "-17\n%\n5\nn\n", ["Result: -2"]);
 Check("remainder zero recovery", "17\n%\n0\n5\nn\n", ["Can't divide on zero", "Result: 2"]);
+Check("power", "2\n^\n10\nn\n", ["Result: 1024"]);
+Check("negative exponent", "2\n^\n-2\nn\n", ["Result: 0.25"]);
+Check("power domain recovery", "-1\n^\n0.5\n2\n+\n3\nn\n", ["no real-number result", "Result: 5"]);
+Check("power overflow recovery", "10\n^\n1000\n2\n+\n3\nn\n", ["outside the supported numeric range", "Result: 5"]);
 Console.WriteLine($"{passed} regression scenarios passed.");
