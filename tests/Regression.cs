@@ -56,4 +56,7 @@ Check("uppercase multiplication alias", "3\n X \n4\nn\n", ["Result: 12"]);
 Check("typographic multiplication", "3\n×\n4\nn\n", ["Result: 12"]);
 Check("typographic division", "12\n÷\n4\nn\n", ["Result: 3"]);
 Check("typographic subtraction", "3\n−\n4\nn\n", ["Result: -1"]);
+Check("remainder", "17\n%\n5\nn\n", ["Result: 2"]);
+Check("negative remainder", "-17\n%\n5\nn\n", ["Result: -2"]);
+Check("remainder zero recovery", "17\n%\n0\n5\nn\n", ["Can't divide on zero", "Result: 2"]);
 Console.WriteLine($"{passed} regression scenarios passed.");

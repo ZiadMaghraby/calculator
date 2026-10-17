@@ -19,12 +19,12 @@ public class Program
             string? operation;
             while (true)
             {
-                output.Write("Enter an operation (+, -, *, /): ");
+                output.Write("Enter an operation (+, -, *, /, %): ");
                 operation = input.ReadLine()?.Trim();
                 if (operation is null || IsQuit(operation)) { output.WriteLine("Thank you for using Calculator <3 "); return; }
                 if (operation.Equals("help", StringComparison.OrdinalIgnoreCase) || operation == "?")
                 {
-                    output.WriteLine("Operations: + add, - subtract, * multiply, / divide. Type q to exit.");
+                    output.WriteLine("Operations: + add, - subtract, * multiply, / divide, % remainder. Type q to exit.");
                     continue;
                 }
                 operation = operation.ToLowerInvariant() switch
@@ -34,16 +34,17 @@ public class Program
                     "−" => "-",
                     _ => operation,
                 };
-                if (operation is "+" or "-" or "*" or "/") break;
+                if (operation is "+" or "-" or "*" or "/" or "%") break;
                 output.WriteLine("Unsupported operation");
             }
 
-            if (!TryReadNumber(input, output, "Enter second number: ", out double second, operation == "/")) break;
+            if (!TryReadNumber(input, output, "Enter second number: ", out double second, operation is "/" or "%")) break;
             double result = operation switch
             {
                 "+" => first + second,
                 "-" => first - second,
                 "*" => first * second,
+                "%" => first % second,
                 _ => first / second,
             };
             if (!double.IsFinite(result))
