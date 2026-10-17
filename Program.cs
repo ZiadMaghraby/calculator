@@ -13,6 +13,7 @@ public class Program
         ArgumentNullException.ThrowIfNull(input);
         ArgumentNullException.ThrowIfNull(output);
         output.WriteLine("C# Calculator");
+        output.WriteLine("Type q or quit to exit; type help at the operation prompt.");
         while (TryReadNumber(input, output, "\nEnter first number: ", out double first))
         {
             string? operation;
@@ -21,6 +22,11 @@ public class Program
                 output.Write("Enter an operation (+, -, *, /): ");
                 operation = input.ReadLine()?.Trim();
                 if (operation is null || IsQuit(operation)) { output.WriteLine("Thank you for using Calculator <3 "); return; }
+                if (operation.Equals("help", StringComparison.OrdinalIgnoreCase) || operation == "?")
+                {
+                    output.WriteLine("Operations: + add, - subtract, * multiply, / divide. Type q to exit.");
+                    continue;
+                }
                 if (operation is "+" or "-" or "*" or "/") break;
                 output.WriteLine("Unsupported operation");
             }

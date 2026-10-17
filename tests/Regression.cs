@@ -20,7 +20,7 @@ void Check(string name, string input, string[] expected, string? culture = null)
     passed++;
 }
 Check("retry first operand", "bad\n12\n+\n3\nn\n", ["Invalid number format", "Result: 15"]);
-Check("retry operator preserves first operand", "12\n?\n/\n3\nn\n", ["Unsupported operation", "Result: 4"]);
+Check("retry operator preserves first operand", "12\ninvalid\n/\n3\nn\n", ["Unsupported operation", "Result: 4"]);
 Check("retry second operand preserves calculation", "12\n-\nbad\n2\nn\n", ["Invalid number format", "Result: 10"]);
 Check("zero divisor retries second operand", "12\n/\n0\n-0\n3\nn\n", ["Can't divide on zero", "Result: 4"]);
 Check("nonfinite input", "NaN\nInfinity\n2\n*\n3\nn\n", ["Invalid number format", "Result: 6"]);
@@ -31,7 +31,7 @@ Check("comma is not silently treated as grouping", "1,5\n1.5\n+\n2.5\nn\n", ["In
 Check("repeated grouping separators are rejected", "1,,2\n12\n+\n3\nn\n", ["Invalid number format", "Result: 15"]);
 Check("wrong decimal separator in German", "1.5\n1,5\n+\n2,5\nn\n", ["Invalid number format", "Result: 4"], "de-DE");
 Check("scientific notation and whitespace remain supported", " 1.5e2 \n+\n-2.5e1\nn\n", ["Result: 125"]);
-foreach (var input in new[] { "", "bad\n", "1\n", "1\n?\n", "1\n+\n", "1\n/\n0\n" })
+foreach (var input in new[] { "", "bad\n", "1\n", "1\ninvalid\n", "1\n+\n", "1\n/\n0\n" })
     Check("EOF during prompt", input, []);
 foreach (bool missingInput in new[] { true, false })
 {
@@ -51,4 +51,5 @@ foreach (var input in new[] { "q\n", " QUIT \n", "1\nq\n", "1\n+\nquit\n", "1\n/
 Check("repeat retries invalid response", "1\n+\n2\nmaybe\n YES \n4\n-\n1\nNO\n", ["Result: 3", "Enter y/yes", "Result: 3"]);
 Check("EOF at repeat", "1\n+\n2\n", ["Result: 3"]);
 Check("quit at repeat", "1\n+\n2\nquit\n", ["Result: 3"]);
+Check("operator help preserves operand", "12\nHELP\n?\n/\n3\nn\n", ["Operations:", "Result: 4"]);
 Console.WriteLine($"{passed} regression scenarios passed.");
