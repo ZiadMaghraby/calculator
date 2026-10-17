@@ -27,6 +27,13 @@ public class Program
                     output.WriteLine("Operations: + add, - subtract, * multiply, / divide. Type q to exit.");
                     continue;
                 }
+                operation = operation.ToLowerInvariant() switch
+                {
+                    "x" or "×" => "*",
+                    "÷" => "/",
+                    "−" => "-",
+                    _ => operation,
+                };
                 if (operation is "+" or "-" or "*" or "/") break;
                 output.WriteLine("Unsupported operation");
             }

@@ -52,4 +52,8 @@ Check("repeat retries invalid response", "1\n+\n2\nmaybe\n YES \n4\n-\n1\nNO\n",
 Check("EOF at repeat", "1\n+\n2\n", ["Result: 3"]);
 Check("quit at repeat", "1\n+\n2\nquit\n", ["Result: 3"]);
 Check("operator help preserves operand", "12\nHELP\n?\n/\n3\nn\n", ["Operations:", "Result: 4"]);
+Check("uppercase multiplication alias", "3\n X \n4\nn\n", ["Result: 12"]);
+Check("typographic multiplication", "3\n×\n4\nn\n", ["Result: 12"]);
+Check("typographic division", "12\n÷\n4\nn\n", ["Result: 3"]);
+Check("typographic subtraction", "3\n−\n4\nn\n", ["Result: -1"]);
 Console.WriteLine($"{passed} regression scenarios passed.");
